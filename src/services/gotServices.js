@@ -24,6 +24,7 @@ export default class GotService {
     
     async getAllCharacters() {
         const res = await this.getResource(`/characters?page=5&pageSize=10`);
+        console.log(res.map(this._transformCharacter));
         return res.map(this._transformCharacter);
     }
     
@@ -41,31 +42,48 @@ export default class GotService {
         const house = this.getResource(`/houses/${id}/`);
         return this._transformHouse(house);
     }
-    _transformCharacter(char) {
+
+    isSet(data) {
+        if (data) {
+            return data
+        } else {
+            return 'no data :('
+        }
+    }    
+    
+    _extractId = (item) => {
+        const idRegExp = /\/([0-9]*)$/;
+        return item.url.match(idRegExp)[1];
+    }
+
+    _transformCharacter = (char) => {
         return {
-            name: char.name,
-            gender: char.gender,
-            born: char.born,
-            died: char.died,
-            culture: char.culture
+            id: this._extractId(char),
+            name: this.isSet(char.name),
+            gender: this.isSet(char.gender),
+            born: this.isSet(char.born),
+            died: this.isSet(char.died),
+            culture: this.isSet(char.culture)
         } 
     }
     _transformHouse(house) {
         return {
-            name: house.name,
-            region: house.eregion,
-            words: house.words,
-            titles: house.titles,
-            overlord: house.overlord,
-            ancestralWeapons: house.ancestralWeapons
+            id: this._extractId(house),
+            name: this.isSet(house.name),
+            region: this.isSet(house.eregion),
+            words: this.isSet(house.words),
+            titles: this.isSet(house.titles),
+            overlord: this.isSet(house.overlord),
+            ancestralWeapons: this.isSet(house.ancestralWeapons)
         }
     }
     _transformBook(book) {
         return {
-            name: book.name,
-            numberOfPages: book.numberOfPages,
-            publiser: book.publiser,
-            released: book.released
+            id: this._extractId(book),
+            name: this.isSet(book.name),
+            numberOfPages: this.isSet(book.numberOfPages),
+            publiser: this.isSet(book.publiser),
+            released: this.isSet(book.released)
         }
     }
 }
