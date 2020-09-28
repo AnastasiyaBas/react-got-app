@@ -57,7 +57,7 @@ export default class ItemList extends Component {
         const items = this.renderItems(itemList);
 
         return (
-            <ul className="item-list list-group">
+            <ul className="item-list list-group panel">
                 {items}
             </ul>
         );
