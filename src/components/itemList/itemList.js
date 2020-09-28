@@ -1,24 +1,23 @@
 import React, {Component} from 'react';
 import './itemList.css';
-import gotServices from '../../services/gotServices';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
 
 export default class ItemList extends Component {
-    gotServices = new gotServices();
 
     state = {
-        charList: null,
+        itemList: null,
         error: false
     }
 
     componentDidMount() {
-        this.gotServices.getAllCharacters()
-        .then((charList) => {
-            console.log(charList);
+        const {getData} = this.props;
+
+        getData()
+            .then((itemList) => {
                 this.setState({
-                    charList,
+                    itemList,
                     error: false
                 })
             })
@@ -26,38 +25,39 @@ export default class ItemList extends Component {
     };
     onError(){
         this.setState({
-            charList: null,
+            itemList: null,
             error: true
         });
     };
 
     renderItems(arr) {
         return arr.map((item) => {
-            const {id, name} = item;
+            const {id} = item;
+            const label = this.props.renderItem(item);
             return (
                 <li 
                     key={id} 
                     className="list-group-item"
-                    onClick={ () => this.props.onCharSelected(id)}>
-                    {name}
+                    onClick={ () => this.props.onItemSelected(id)}>
+                    {label}
                 </li>
             )
         })
     }
 
     render() {
-        const {charList, error} = this.state;
+        const {itemList, error} = this.state;
         
-        if (!charList) {
+        if (!itemList) {
             return <Spinner/>
         }
         if (error) {
             return <ErrorMessage/>
         }
-        const items = this.renderItems(charList);
+        const items = this.renderItems(itemList);
 
         return (
-            <ul className="item-list list-group">
+            <ul className="item-list list-group panel">
                 {items}
             </ul>
         );

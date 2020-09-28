@@ -1,6 +1,11 @@
 .btn {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 30px;
+    margin: 20px 0 30px 150px;
 
+}
+.subHeader {
+    text-align: center;
+    color: aliceblue;
+    margin: 20px 0 20px 0;
 }
